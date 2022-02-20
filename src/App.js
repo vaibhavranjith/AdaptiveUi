@@ -8,26 +8,43 @@ import uuid from 'react-uuid';
 
 var containerState = {}
 
+
 function App() {
-  //The stat of button click
+  const [cards, setCards] = useState([])
   const [stats, setStats] = useState({});
   containerState.stats = stats;
   containerState.setStats = handleStatsChange;
-  function handleStatsChange(newStats) {
-    let obj = _.cloneDeep(newStats);
-    setTimeout(function () { setStats(obj) }, 0);
-  }
+
   useEffect(() => {
     console.log("Parent Render")
   }, [])
 
-  var cardId = [{ id: 1 }, 2, 3]
+  function handleStatsChange(newStats) {
+    let obj = _.cloneDeep(newStats);
+    setTimeout(function () { setStats(obj) }, 0);
+  }
+
+  for(let i=0;i<5;i++){
+    cards.push({
+      id : i,
+      count : 0
+    })
+  }
+
+  useEffect(() => {
+
+  }, [cards])
 
   return (
     <>
       <div style={{ display: "flex" }}>
-        <Card height={150} width={150} CardId={1} statistics={stats}></Card>
-        <Card height={150} width={150} CardId={2} statistics={stats}></Card>
+        {
+          cards.map((val, ind) => 
+            <Card height={150} width={150} CardId={val.id} statistics={stats}></Card>
+          )
+        }
+        {/* <Card height={150} width={150} CardId={1} statistics={stats}></Card>
+        <Card height={150} width={150} CardId={2} statistics={stats}></Card> */}
       </div>
     </>
   );
