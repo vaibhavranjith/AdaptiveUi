@@ -1,47 +1,71 @@
-import logo from './logo.svg';
 import './App.css';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import _ from "lodash";
+import _, { values } from "lodash";
 import uuid from 'react-uuid';
+import { statService } from './ServiceFolder/statService';
 
 
 var containerState = {}
 
+const comp = (a, b) => {
+  return a.count - b.count
+}
+
+const Cards = () => {
+  let cards = {}
+  for (let i = 0; i < 5; i++) {
+    cards[i] = { body: {
+      layout : <Card height={150} width={150} statistics={{ id: i, count: 0 }} key={i} ></Card>,
+      count : 0
+    } }
+  }
+  return cards
+}
+
+let cardsGlobal = {}
 
 function App() {
-  const [cards, setCards] = useState([])
-  const [stats, setStats] = useState({});
-  containerState.stats = stats;
-  containerState.setStats = handleStatsChange;
+  let cardsOverall = Cards()
+
+  const [actualCards, setLayouts] = useState(Object.keys(cardsOverall).map((val) => cardsOverall[val].body.layout))
+  const [cardObjects, setObject] = useState(cardsOverall)
+
+  cardsGlobal = cardObjects
 
   useEffect(() => {
-    console.log("Parent Render")
+    console.log("Parent Render!!!!!")
+
+    statService.getStats().subscribe((message) => {
+
+      console.log(message)
+      if (message != undefined) {
+        let {id, count} = message.stats
+        
+        cardsGlobal[id].body.count = count
+
+        let arr = Object.keys(cardsGlobal).map((val) => cardsGlobal[val].body)
+        console.log(arr)
+
+        let sorted = arr.sort(comp)
+        console.log(sorted)
+
+        let layouts = sorted.map((val) => val.layout)
+        console.log(cardsGlobal)
+
+        setLayouts(layouts)
+        setObject(cardsGlobal)
+      }
+    })
   }, [])
 
-  function handleStatsChange(newStats) {
-    let obj = _.cloneDeep(newStats);
-    setTimeout(function () { setStats(obj) }, 0);
-  }
 
-  for(let i=0;i<5;i++){
-    cards.push({
-      id : i,
-      count : 0
-    })
-  }
-
-  useEffect(() => {
-
-  }, [cards])
-
+  console.log(actualCards)
   return (
     <>
       <div style={{ display: "flex" }}>
         {
-          cards.map((val, ind) => 
-            <Card height={150} width={150} CardId={val.id} statistics={stats}></Card>
-          )
+          actualCards
         }
         {/* <Card height={150} width={150} CardId={1} statistics={stats}></Card>
         <Card height={150} width={150} CardId={2} statistics={stats}></Card> */}
@@ -51,38 +75,24 @@ function App() {
 }
 
 
-
-
 /**
  * 
  * @param {*} props 
  */
 function Card(props) {
-  var CardId = props.CardId;
+  let stats = props.statistics
   const [count, setCount] = useState(0);
-  useEffect(() => {
-    console.log(CardId);
-    var newStats = containerState.stats;
-    newStats[CardId] = { count: 0, rank: 0 };
-    containerState.setStats(newStats);
-    // console.log(CardId, props.statistics);
-  }, [])
-  // Function
-  useEffect(() => {
-    console.log("stats updated")
-    console.log(props.statistics)
-  }, [props.statistics]);
 
-  function incrementCount() {
-    var newStats = props.statistics;
-    newStats[CardId].count += 1;
-    containerState.setStats(newStats)
+  const incrementCount = () => {
+    statService.pushStats({ id: stats.id, count: count + 1 })
+    setCount(count + 1)
+
   }
 
   function handleClick() {
     incrementCount()
-    // incrementCount();
   }
+
   // Styling of the card
   const cardStyle = {
     height: props.height + "px",
@@ -101,13 +111,12 @@ function Card(props) {
     default: "none"
   }
 
-
   return (
     <div style={cardStyle}>
       <div>
         <ul>
-          <li><b>Card Id: </b>{props.CardId}</li>
-          <li><b>count: </b>{props.statistics[CardId] === undefined ? 0 : props.statistics[CardId].count}</li>
+          <li><b>Card Id: </b>{stats.id}</li>
+          <li><b>count: </b>{count}</li>
         </ul>
       </div>
       <button style={buttonStyle} onClick={handleClick}>Click</button>
