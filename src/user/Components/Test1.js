@@ -5,8 +5,9 @@ import { statService } from "../../ServiceFolder/statService";
 function Test(props) {
 
     console.log(props.id)
-    const comp = (a, b) => {
-        return a.count - b.count
+
+    const handleAction = (event) => {
+        statService.storeAction({ key: props.id, action: "sell" })
     }
 
     return (

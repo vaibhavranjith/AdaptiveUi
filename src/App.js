@@ -77,19 +77,19 @@ function App() {
   return (
     <>
       <Container brainFx={comp} behaveFx={"sort"}>
-        <Box key={1} >
+        <Box id={1}>
           <Test></Test>
         </Box>
-        <Box key={2}>
+        <Box id={2}>
           <Test></Test>
         </Box>
-        <Box key={3}>
+        <Box id={3}>
           <Test></Test>
         </Box>
-        <Box key={4}>
+        <Box id={4}>
           <Test></Test>
         </Box>
-        <Box key={5}>
+        <Box id={5}>
           <Test></Test>
         </Box>
       </Container>

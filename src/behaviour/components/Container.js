@@ -2,25 +2,25 @@ import React, { useEffect, useLayoutEffect } from "react";
 import Box from "./Box";
 import { statService } from '../../ServiceFolder/statService'
 import objectHash from "object-hash";
-import { set } from "lodash";
+import { set, sortBy } from "lodash";
 
-// const Cards = () => {
-//     let cards = {}
-//     for (let i = 0; i < 5; i++) {
-//         cards[i] = {
-//             body: {
-//                 layout: <Card statistics={{ id: i, count: 0 }} key={i} ></Card>,
-//                 count: 0
-//             }
-//         }
-//     }
-//     return cards
-// } storeAction("sell")
-// {
-//     tag:"sell",
-//     key:""
-// }
 
+const shadeBehave = (arr, fx, children) => {
+
+    let newArr = arr.mapsort(fx)
+    let newLayouts = []
+
+    newArr.map((val, ind) => {
+        let color = rgba(255,0,0,)
+        newLayouts.push(
+            <div style={{backgroundColor : color}}>
+                {children[ind]}
+            </div>
+        )
+    })
+
+    // return
+}
 
 function Container(props) {
     const [layouts, setLayouts] = React.useState(props.children)
@@ -31,10 +31,16 @@ function Container(props) {
         
 
         //array of keys
-        children.map((val) => {
-            console.log(val.key)
+        let arr = children.map((val) => {
+            return val.props.id
         })
 
+        let sorted = arr.sort(brainFx)
+        shadeBehave(arr, brainFx, children)
+
+
+
+        
         // setLayouts(newLayouts)
         // console.log(newLayouts);
     }

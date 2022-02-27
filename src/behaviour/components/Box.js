@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { statService } from '../../ServiceFolder/statService';
 
 function Box(props, ref) {
 
-    console.log(this)
 
     return (
-        <>
+        <React.Fragment key={props.id}>
             {React.cloneElement(props.children, { id: props.id })}
-        </>
+        </React.Fragment>
     )
 }
 

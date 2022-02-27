@@ -19,3 +19,5 @@ statService.getStats().subscribe((message) => {
       db[message.id][message.action] += 1 
     }
 })
+
+
