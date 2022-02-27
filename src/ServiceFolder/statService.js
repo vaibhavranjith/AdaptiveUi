@@ -4,6 +4,18 @@ import { BehaviorSubject } from "rxjs";
 const stats = new BehaviorSubject();
 
 export const statService = {
-  pushStats: (message) => stats.next({ stats: message }),
+  storeAction: (message) => stats.next({ stats: message }),
   getStats: () => stats.asObservable(),
 };
+
+//Stat Container
+export let db ={}
+statService.getStats().subscribe((message) => {
+    if(message != undefined){
+
+      if(db[message.id] != undefined)
+      db[message.id] = {}
+
+      db[message.id][message.action] += 1 
+    }
+})

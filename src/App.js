@@ -3,14 +3,14 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import _, { values } from "lodash";
 import uuid from 'react-uuid';
-import { statService } from './ServiceFolder/statService';
+import { db, statService } from './ServiceFolder/statService';
 import Box from './behaviour/components/Box';
 import Test from "./user/Components/Test1"
 import Container from './behaviour/components/Container';
 var containerState = {}
 
 const comp = (a, b) => {
-  return a.count - b.count
+  return db[a]['sell'] - db[b]['sell']
 }
 
 const Cards = () => {
@@ -76,8 +76,8 @@ let cardsGlobal = {}
 function App() {
   return (
     <>
-      <Container>
-        <Box key={1}>
+      <Container brainFx={comp} behaveFx={"sort"}>
+        <Box key={1} >
           <Test></Test>
         </Box>
         <Box key={2}>

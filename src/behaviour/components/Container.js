@@ -21,18 +21,31 @@ import { set } from "lodash";
 //     key:""
 // }
 
+
 function Container(props) {
     const [layouts, setLayouts] = React.useState(props.children)
 
-    function handleRender(state) {
-        setLayouts(state)
-        console.log(state);
+    function handleRender(children, message) {
+        let {brainFx, behaveFx} = props
+        // let {action} = message
+        
+
+        //array of keys
+        children.map((val) => {
+            console.log(val.key)
+        })
+
+        // setLayouts(newLayouts)
+        // console.log(newLayouts);
     }
 
     useEffect(() => {
         setLayouts(props.children);
         var subscription = statService.getStats().subscribe((message) => {
-            handleRender(props.children);
+            console.log("Triggering behaviour function ...")
+
+            if(message == undefined)
+            handleRender(props.children, message);
         })
         return () => {
             subscription.unsubscribe();

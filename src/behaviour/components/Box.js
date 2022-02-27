@@ -1,14 +1,16 @@
 import React from 'react';
 import { statService } from '../../ServiceFolder/statService';
 
-function Box(props) {
+function Box(props, ref) {
+
+    console.log(this)
+
     return (
         <>
-            {props.children}
+            {React.cloneElement(props.children, { id: props.id })}
         </>
     )
 }
-
 
 
 export default Box;
