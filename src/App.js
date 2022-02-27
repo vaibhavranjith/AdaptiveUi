@@ -4,8 +4,9 @@ import { useState } from 'react';
 import _, { values } from "lodash";
 import uuid from 'react-uuid';
 import { statService } from './ServiceFolder/statService';
-
-
+import Box from './behaviour/components/Box';
+import Test from "./user/Components/Test1"
+import Container from './behaviour/components/Container';
 var containerState = {}
 
 const comp = (a, b) => {
@@ -15,65 +16,86 @@ const comp = (a, b) => {
 const Cards = () => {
   let cards = {}
   for (let i = 0; i < 5; i++) {
-    cards[i] = { body: {
-      layout : <Card height={150} width={150} statistics={{ id: i, count: 0 }} key={i} ></Card>,
-      count : 0
-    } }
+    cards[i] = {
+      body: {
+        layout: <Card statistics={{ id: i, count: 0 }} key={i} ></Card>,
+        count: 0
+      }
+    }
   }
   return cards
 }
 
 let cardsGlobal = {}
 
+// function App() {
+//   let cardsOverall = Cards()
+
+//   const [layouts, setLayouts] = useState(Object.keys(cardsOverall).map((val) => cardsOverall[val].body.layout))
+//   const [cardObjects, setObject] = useState(cardsOverall)
+
+//   cardsGlobal = cardObjects
+
+//   useEffect(() => {
+//     console.log("Parent Render!!!!!")
+
+//     statService.getStats().subscribe((message) => {
+
+//       console.log(message)
+//       if (message != undefined) {
+//         let { id, count } = message.stats
+
+//         cardsGlobal[id].body.count = count
+
+//         let arr = Object.keys(cardsGlobal).map((val) => cardsGlobal[val].body)
+//         console.log(arr)
+
+//         let sorted = arr.sort(comp)
+//         console.log(sorted)
+
+//         let newLayouts = sorted.map((val) => val.layout)
+//         console.log(cardsGlobal)
+
+//         setLayouts(newLayouts)
+//         setObject(cardsGlobal)
+//       }
+//     })
+//   }, [])
+
+//   return (
+//     <>
+//       <div style={{ display: "flex" }}>
+//         {
+//           layouts
+//         }
+//       </div>
+//     </>
+//   );
+// }
+
 function App() {
-  let cardsOverall = Cards()
-
-  const [actualCards, setLayouts] = useState(Object.keys(cardsOverall).map((val) => cardsOverall[val].body.layout))
-  const [cardObjects, setObject] = useState(cardsOverall)
-
-  cardsGlobal = cardObjects
-
-  useEffect(() => {
-    console.log("Parent Render!!!!!")
-
-    statService.getStats().subscribe((message) => {
-
-      console.log(message)
-      if (message != undefined) {
-        let {id, count} = message.stats
-        
-        cardsGlobal[id].body.count = count
-
-        let arr = Object.keys(cardsGlobal).map((val) => cardsGlobal[val].body)
-        console.log(arr)
-
-        let sorted = arr.sort(comp)
-        console.log(sorted)
-
-        let layouts = sorted.map((val) => val.layout)
-        console.log(cardsGlobal)
-
-        setLayouts(layouts)
-        setObject(cardsGlobal)
-      }
-    })
-  }, [])
-
-
-  console.log(actualCards)
   return (
     <>
-      <div style={{ display: "flex" }}>
-        {
-          actualCards
-        }
-        {/* <Card height={150} width={150} CardId={1} statistics={stats}></Card>
-        <Card height={150} width={150} CardId={2} statistics={stats}></Card> */}
-      </div>
+      <Container>
+        <Box key={1}>
+          <Test></Test>
+        </Box>
+        <Box key={2}>
+          <Test></Test>
+        </Box>
+        <Box key={3}>
+          <Test></Test>
+        </Box>
+        <Box key={4}>
+          <Test></Test>
+        </Box>
+        <Box key={5}>
+          <Test></Test>
+        </Box>
+      </Container>
     </>
-  );
+  )
 }
-
 
 /**
  * 
@@ -112,15 +134,9 @@ function Card(props) {
   }
 
   return (
-    <div style={cardStyle}>
-      <div>
-        <ul>
-          <li><b>Card Id: </b>{stats.id}</li>
-          <li><b>count: </b>{count}</li>
-        </ul>
-      </div>
-      <button style={buttonStyle} onClick={handleClick}>Click</button>
-    </div>
+    <>
+      {props.layout}
+    </>
   )
 
 }
